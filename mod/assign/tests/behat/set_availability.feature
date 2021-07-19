@@ -54,9 +54,9 @@ Feature: Set availability dates for an assignment
     And I turn editing mode on
     And I add the "Calendar" block
     And I log out
-
-    And I am on the "C1" Course page logged in as student1
-    And I follow "This month"
+    And I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Full calendar"
     When I hover over day "2" of this month in the calendar
     Then I should see "C1: Assignment name is due"
 
