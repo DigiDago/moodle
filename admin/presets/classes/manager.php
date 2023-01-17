@@ -36,84 +36,86 @@ require_once($CFG->libdir . '/adminlib.php');
  */
 class manager {
 
-    /** @var \admin_root The admin root tree with the settings. **/
-    private $adminroot;
-
+    /** @var int Non-core preset */
+    public const NONCORE_PRESET = 0;
+    /** @var int Starter preset */
+    public const STARTER_PRESET = 1;
+    /** @var int Full preset */
+    public const FULL_PRESET = 2;
     /** @var array Setting classes mapping, to associated the local/setting class that should be used when there is
      * no specific class. */
     protected static $settingclassesmap = [
-            'adminpresets_admin_setting_agedigitalconsentmap' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configcolourpicker' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configdirectory' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configduration_with_advanced' => 'adminpresets_admin_setting_configtext_with_advanced',
-            'adminpresets_admin_setting_configduration' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configempty' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configexecutable' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configfile' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_confightmleditor' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configmixedhostiplist' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configmultiselect_modules' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_configpasswordunmask' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configportlist' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configselect_with_lock' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_configtext_trim_lower' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configtext_with_maxlength' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configtextarea' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configthemepreset' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_countrycodes' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_courselist_frontpage' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_description' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_enablemobileservice' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_filetypes' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_forcetimezone' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_grade_profilereport' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_langlist' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_my_grades_report' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_pickroles' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_question_behaviour' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_regradingcheckbox' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_scsscode' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_servertimezone' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_sitesetcheckbox' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_sitesetselect' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_special_adminseesall' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_special_backup_auto_destination' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_special_coursecontact' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_special_coursemanager' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_special_debug' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_special_frontpagedesc' => 'adminpresets_admin_setting_sitesettext',
-            'adminpresets_admin_setting_special_gradebookroles' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_special_gradeexport' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_special_gradelimiting' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_special_grademinmaxtouse' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_special_gradepointdefault' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_special_gradepointmax' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_special_registerauth' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_special_selectsetup' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_settings_country_select' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_settings_coursecat_select' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_settings_h5plib_handler_select' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_settings_num_course_sections' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_settings_sitepolicy_handler_select' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_antivirus_clamav_pathtounixsocket_setting' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_antivirus_clamav_runningmethod_setting' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_antivirus_clamav_tcpsockethost_setting' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_db_admin_setting_special_auth_configtext' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_ldap_admin_setting_special_lowercase_configtext' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_ldap_admin_setting_special_ntlm_configtext' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_shibboleth_admin_setting_convert_data' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_shibboleth_admin_setting_special_idp_configtextarea' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_shibboleth_admin_setting_special_wayf_select' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_editor_atto_toolbar_setting' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_editor_tinymce_json_setting_textarea' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_enrol_database_admin_setting_category' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_enrol_flatfile_role_setting' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_enrol_ldap_admin_setting_category' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_format_singleactivity_admin_setting_activitytype' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_qtype_multichoice_admin_setting_answernumbering' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_agedigitalconsentmap' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configcolourpicker' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configdirectory' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configduration_with_advanced' => 'adminpresets_admin_setting_configtext_with_advanced',
+        'adminpresets_admin_setting_configduration' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configempty' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configexecutable' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configfile' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_confightmleditor' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configmixedhostiplist' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configmultiselect_modules' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_configpasswordunmask' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configportlist' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configselect_with_lock' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_configtext_trim_lower' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configtext_with_maxlength' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configtextarea' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configthemepreset' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_countrycodes' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_courselist_frontpage' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_description' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_enablemobileservice' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_filetypes' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_forcetimezone' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_grade_profilereport' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_langlist' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_my_grades_report' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_pickroles' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_question_behaviour' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_regradingcheckbox' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_scsscode' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_servertimezone' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_sitesetcheckbox' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_sitesetselect' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_special_adminseesall' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_special_backup_auto_destination' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_special_coursecontact' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_special_coursemanager' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_special_debug' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_special_frontpagedesc' => 'adminpresets_admin_setting_sitesettext',
+        'adminpresets_admin_setting_special_gradebookroles' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_special_gradeexport' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_special_gradelimiting' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_special_grademinmaxtouse' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_special_gradepointdefault' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_special_gradepointmax' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_special_registerauth' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_special_selectsetup' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_settings_country_select' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_settings_coursecat_select' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_settings_h5plib_handler_select' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_settings_num_course_sections' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_settings_sitepolicy_handler_select' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_antivirus_clamav_pathtounixsocket_setting' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_antivirus_clamav_runningmethod_setting' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_antivirus_clamav_tcpsockethost_setting' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_db_admin_setting_special_auth_configtext' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_ldap_admin_setting_special_lowercase_configtext' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_ldap_admin_setting_special_ntlm_configtext' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_shibboleth_admin_setting_convert_data' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_shibboleth_admin_setting_special_idp_configtextarea' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_shibboleth_admin_setting_special_wayf_select' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_editor_atto_toolbar_setting' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_editor_tinymce_json_setting_textarea' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_enrol_database_admin_setting_category' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_enrol_flatfile_role_setting' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_enrol_ldap_admin_setting_category' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_format_singleactivity_admin_setting_activitytype' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_qtype_multichoice_admin_setting_answernumbering' => 'adminpresets_admin_setting_configselect',
     ];
-
-    /** @var array Relation between database fields and XML files. **/
+    /** @var array Relation between database fields and XML files. * */
     protected static $dbxmlrelations = [
         'name' => 'NAME',
         'comments' => 'COMMENTS',
@@ -123,50 +125,304 @@ class manager {
         'moodleversion' => 'MOODLE_VERSION',
         'moodlerelease' => 'MOODLE_RELEASE'
     ];
-
-    /** @var int Non-core preset */
-    public const NONCORE_PRESET = 0;
-
-    /** @var int Starter preset */
-    public const STARTER_PRESET = 1;
-
-    /** @var int Full preset */
-    public const FULL_PRESET = 2;
+    /** @var \admin_root The admin root tree with the settings. * */
+    private $adminroot;
 
     /**
-     * Gets the system settings
+     * Gets the javascript to populate the settings tree
      *
-     * Loads the DB $CFG->prefix.'config' values and the
-     * $CFG->prefix.'config_plugins' values and redirects
-     * the flow through $this->get_settings()
-     *
-     * @return array $settings Array format $array['plugin']['settingname'] = settings_types child class
+     * @param array $settings Array format $array['plugin']['settingname'] = settings_types child class
+     * @return array Array of settings data ids, nodes, labels, descriptions and parents.
      */
-    public function get_site_settings(): array {
+    public function get_settings_branches(array $settings): array {
+
+        // Nodes should be added in hierarchical order.
+        $nodes = ['categories' => [], 'pages' => [], 'settings' => []];
+        $nodes = $this->get_settings_elements($settings, false, false, $nodes);
+
+        $levels = ['categories', 'pages', 'settings'];
+        foreach ($levels as $level) {
+            foreach ($nodes[$level] as $data) {
+                $ids[] = $data['type'];
+                $nodeids[] = $data['nodename'];
+                $labels[] = $data['nodetext'];
+                $descriptions[] = $data['description'];
+                $parents[] = $data['parents'];
+            }
+        }
+        return [
+            'ids' => $ids,
+            'nodes' => $nodeids,
+            'labels' => $labels,
+            'descriptions' => $descriptions,
+            'parents' => $parents
+        ];
+    }
+
+    /**
+     * Gets the html code to select the settings to export/import/load
+     *
+     * @param array $allsettings Array format $array['plugin']['settingname'] = settings_types child class
+     * @param object|bool $admintree The admin tree branche object or false if we are in the root
+     * @param object|bool $jsparentnode Name of the javascript parent category node
+     * @param array $nodes Tree nodes
+     * @return array Code to output
+     */
+    public function get_settings_elements(array $allsettings, $admintree = false, $jsparentnode = false,
+        array &$nodes = []): array {
+
+        if (empty($this->adminroot)) {
+            $this->adminroot = admin_get_root(false, true);
+        }
+
+        // If there are no children, load admin tree and iterate through.
+        if (!$admintree) {
+            $this->adminroot = admin_get_root(false, true);
+            $admintree = $this->adminroot->children;
+        }
+
+        // If there are no parentnode specified the parent becomes the tree root.
+        if (!$jsparentnode) {
+            $jsparentnode = 'root';
+        }
+
+        // Iterates through children.
+        foreach ($admintree as $key => $child) {
+            $pagesettings = [];
+
+            // We must search category children.
+            if (is_a($child, 'admin_category')) {
+                if ($child->children) {
+                    $categorynode = $child->name . 'Node';
+                    $nodehtml = $child->visiblename;
+                    $nodes['categories'][$categorynode] = [
+                        'type' => 'category',
+                        'nodename' => $categorynode,
+                        'nodetext' => (string) $nodehtml,
+                        'description' => '',
+                        'parents' => $jsparentnode
+                    ];
+                    // Not all admin_categories have admin_settingpages.
+                    $this->get_settings_elements($allsettings, $child->children, $categorynode, $nodes);
+                }
+
+                // Settings page.
+            } else if (is_a($child, 'admin_settingpage') || is_a($child, 'admin_externalpage')) {
+                // Only if there are settings.
+                if (property_exists($child, 'settings')) {
+
+                    // The name of that page tree node.
+                    $pagenode = $child->name . 'Node';
+
+                    foreach ($child->settings as $values) {
+                        $settingname = $values->name;
+
+                        // IF no plugin was specified mark as 'none'.
+                        if (!$plugin = $values->plugin) {
+                            $plugin = 'none';
+                        }
+
+                        if (empty($allsettings[$plugin][$settingname])) {
+                            continue;
+                        }
+
+                        // Getting setting data.
+                        $setting = $allsettings[$plugin][$settingname];
+                        $settingid = $setting->get_id();
+
+                        // String to add the setting to js tree.
+                        $pagesettings[$settingid] = [
+                            'type' => 'setting',
+                            'nodename' => $settingid,
+                            'nodetext' => $setting->get_text(),
+                            'description' => $setting->get_description(),
+                            'parents' => $pagenode
+                        ];
+                    }
+
+                    // The page node only should be added if it have children.
+                    if ($pagesettings) {
+                        $nodehtml = $child->visiblename;
+                        $nodes['pages'][$pagenode] = [
+                            'type' => 'page',
+                            'nodename' => $pagenode,
+                            'nodetext' => (string) $nodehtml,
+                            'description' => '',
+                            'parents' => $jsparentnode
+                        ];
+                        $nodes['settings'] = array_merge($nodes['settings'], $pagesettings);
+                    }
+                }
+            }
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * Apply a given preset.
+     *
+     * @param int $presetid The preset identifier to apply.
+     * @param bool $simulate Whether this is a simulation or not.
+     * @return array List with an array with the applied settings and another with the skipped ones.
+     */
+    public function apply_preset(int $presetid, bool $simulate = false): array {
         global $DB;
 
-        // Db configs (to avoid multiple queries).
-        $dbconfig = $DB->get_records_select('config', '', [], '', 'name, value');
-
-        // Adding site settings in course table.
-        $frontpagevalues = $DB->get_record_select('course', 'id = 1',
-                [], 'fullname, shortname, summary');
-        foreach ($frontpagevalues as $field => $value) {
-            $dbconfig[$field] = new stdClass();
-            $dbconfig[$field]->name = $field;
-            $dbconfig[$field]->value = $value;
+        if (!$DB->get_record('adminpresets', ['id' => $presetid])) {
+            throw new moodle_exception('errornopreset', 'core_adminpresets');
         }
-        $sitedbsettings['none'] = $dbconfig;
 
-        // Config plugins.
-        $configplugins = $DB->get_records('config_plugins');
-        foreach ($configplugins as $configplugin) {
-            $sitedbsettings[$configplugin->plugin][$configplugin->name] = new stdClass();
-            $sitedbsettings[$configplugin->plugin][$configplugin->name]->name = $configplugin->name;
-            $sitedbsettings[$configplugin->plugin][$configplugin->name]->value = $configplugin->value;
+        // Apply preset settings.
+        [$settingsapplied, $settingsskipped, $appid] = $this->apply_settings($presetid, $simulate);
+
+        // Set plugins visibility.
+        [$pluginsapplied, $pluginsskipped] = $this->apply_plugins($presetid, $simulate, $appid);
+
+        $applied = array_merge($settingsapplied, $pluginsapplied);
+        $skipped = array_merge($settingsskipped, $pluginsskipped);
+
+        if (!$simulate) {
+            // Store it in a config setting as the last preset applied.
+            set_config('lastpresetapplied', $presetid, 'adminpresets');
         }
-        // Get an array with the common format.
-        return $this->get_settings($sitedbsettings, true, []);
+
+        return [$applied, $skipped];
+    }
+
+    /**
+     * Apply settings from a preset.
+     *
+     * @param int $presetid The preset identifier to apply.
+     * @param bool $simulate Whether this is a simulation or not.
+     * @param int|null $adminpresetapplyid The identifier of the adminpresetapply or null if it hasn't been created previously.
+     * @return array List with an array with the applied settings, another with the skipped ones and the adminpresetapplyid.
+     */
+    protected function apply_settings(int $presetid, bool $simulate = false, ?int $adminpresetapplyid = null): array {
+        global $DB, $USER;
+
+        $applied = [];
+        $skipped = [];
+        if (!$items = $DB->get_records('adminpresets_it', ['adminpresetid' => $presetid])) {
+            return [$applied, $skipped, $adminpresetapplyid];
+        }
+
+        $presetdbsettings = $this->get_settings_from_db($items);
+        // Standarized format: $array['plugin']['settingname'] = child class.
+        $presetsettings = $this->get_settings($presetdbsettings, false, []);
+
+        // Standarized format: $array['plugin']['settingname'] = child class.
+        $siteavailablesettings = $this->get_site_settings();
+
+        // Set settings values.
+        foreach ($presetsettings as $plugin => $pluginsettings) {
+            foreach ($pluginsettings as $settingname => $presetsetting) {
+                $updatesetting = false;
+
+                // Current value (which will become old value if the setting is legit to be applied).
+                $sitesetting = $siteavailablesettings[$plugin][$settingname];
+
+                // Wrong setting, set_value() method has previously cleaned the value.
+                if ($sitesetting->get_value() === false) {
+                    debugging($presetsetting->get_settingdata()->plugin . '/' . $presetsetting->get_settingdata()->name .
+                        ' setting has a wrong value!', DEBUG_DEVELOPER);
+                    continue;
+                }
+
+                // If the new value is different the setting must be updated.
+                if ($presetsetting->get_value() != $sitesetting->get_value()) {
+                    $updatesetting = true;
+                }
+
+                // If one of the setting attributes values is different, setting must also be updated.
+                if ($presetsetting->get_attributes_values()) {
+
+                    $siteattributesvalues = $presetsetting->get_attributes_values();
+                    foreach ($presetsetting->get_attributes_values() as $attributename => $attributevalue) {
+
+                        if ($attributevalue !== $siteattributesvalues[$attributename]) {
+                            $updatesetting = true;
+                        }
+                    }
+                }
+
+                $visiblepluginname = $presetsetting->get_settingdata()->plugin;
+                if ($visiblepluginname == 'none') {
+                    $visiblepluginname = 'core';
+                }
+                $data = [
+                    'plugin' => $visiblepluginname,
+                    'visiblename' => $presetsetting->get_settingdata()->visiblename,
+                    'visiblevalue' => $presetsetting->get_visiblevalue(),
+                ];
+
+                // Saving data.
+                if ($updatesetting) {
+                    // The preset application it's only saved when differences (in their values) are found.
+                    if (empty($applieditem)) {
+                        // Save the preset application and store the preset applied id.
+                        $presetapplied = new stdClass();
+                        $presetapplied->adminpresetid = $presetid;
+                        $presetapplied->userid = $USER->id;
+                        $presetapplied->time = time();
+                        if (!$simulate && !$adminpresetapplyid = $DB->insert_record('adminpresets_app', $presetapplied)) {
+                            throw new moodle_exception('errorinserting', 'core_adminpresets');
+                        }
+                    }
+
+                    // Implemented this way because the config_write method of admin_setting class does not return the
+                    // config_log inserted id.
+                    $applieditem = new stdClass();
+                    $applieditem->adminpresetapplyid = $adminpresetapplyid;
+                    if (!$simulate && $applieditem->configlogid = $presetsetting->save_value()) {
+                        $DB->insert_record('adminpresets_app_it', $applieditem);
+                    }
+
+                    // For settings with multiple values.
+                    if (!$simulate && $attributeslogids = $presetsetting->save_attributes_values()) {
+                        foreach ($attributeslogids as $attributelogid) {
+                            $applieditemattr = new stdClass();
+                            $applieditemattr->adminpresetapplyid = $applieditem->adminpresetapplyid;
+                            $applieditemattr->configlogid = $attributelogid;
+                            $applieditemattr->itemname = $presetsetting->get_settingdata()->name;
+                            $DB->insert_record('adminpresets_app_it_a', $applieditemattr);
+                        }
+                    }
+
+                    // Added to changed values.
+                    $data['oldvisiblevalue'] = $sitesetting->get_visiblevalue();
+                    $applied[] = $data;
+                } else {
+                    // Unnecessary changes (actual setting value).
+                    $skipped[] = $data;
+                }
+            }
+        }
+        return [$applied, $skipped, $adminpresetapplyid];
+    }
+
+    /**
+     * Gets the standarized settings array from DB records
+     *
+     * @param array $dbsettings Array of objects
+     * @return   array Standarized array,
+     * format $array['plugin']['name'] = obj('name'=>'settingname', 'value'=>'settingvalue')
+     */
+    public function get_settings_from_db(array $dbsettings): array {
+        $settings = [];
+
+        if (!$dbsettings) {
+            return $settings;
+        }
+
+        foreach ($dbsettings as $dbsetting) {
+            $settings[$dbsetting->plugin][$dbsetting->name] = new stdClass();
+            $settings[$dbsetting->plugin][$dbsetting->name]->itemid = $dbsetting->id;
+            $settings[$dbsetting->plugin][$dbsetting->name]->name = $dbsetting->name;
+            $settings[$dbsetting->plugin][$dbsetting->name]->value = $dbsetting->value;
+        }
+
+        return $settings;
     }
 
     /**
@@ -257,7 +513,7 @@ class manager {
                             if (!$sitedbvalues) {
                                 $itemid = $dbsettings[$values->plugin][$settingname]->itemid;
                                 $attrs = $DB->get_records('adminpresets_it_a',
-                                        ['itemid' => $itemid], '', 'name, value');
+                                    ['itemid' => $itemid], '', 'name, value');
                             }
                             foreach ($attributes as $defaultvarname => $varname) {
 
@@ -287,6 +543,8 @@ class manager {
                                 }
                             }
                         }
+
+                        $setting->set_text();
 
                         // Adding to general settings array.
                         $settings[$values->plugin][$settingname] = $setting;
@@ -357,59 +615,137 @@ class manager {
     }
 
     /**
-     * Gets the standarized settings array from DB records
+     * Gets the system settings
      *
-     * @param array $dbsettings Array of objects
-     * @return   array Standarized array,
-     * format $array['plugin']['name'] = obj('name'=>'settingname', 'value'=>'settingvalue')
+     * Loads the DB $CFG->prefix.'config' values and the
+     * $CFG->prefix.'config_plugins' values and redirects
+     * the flow through $this->get_settings()
+     *
+     * @return array $settings Array format $array['plugin']['settingname'] = settings_types child class
      */
-    public function get_settings_from_db(array $dbsettings): array {
-        $settings = [];
+    public function get_site_settings(): array {
+        global $DB;
 
-        if (!$dbsettings) {
-            return $settings;
+        // Db configs (to avoid multiple queries).
+        $dbconfig = $DB->get_records_select('config', '', [], '', 'name, value');
+
+        // Adding site settings in course table.
+        $frontpagevalues = $DB->get_record_select('course', 'id = 1',
+            [], 'fullname, shortname, summary');
+        foreach ($frontpagevalues as $field => $value) {
+            $dbconfig[$field] = new stdClass();
+            $dbconfig[$field]->name = $field;
+            $dbconfig[$field]->value = $value;
         }
+        $sitedbsettings['none'] = $dbconfig;
 
-        foreach ($dbsettings as $dbsetting) {
-            $settings[$dbsetting->plugin][$dbsetting->name] = new stdClass();
-            $settings[$dbsetting->plugin][$dbsetting->name]->itemid = $dbsetting->id;
-            $settings[$dbsetting->plugin][$dbsetting->name]->name = $dbsetting->name;
-            $settings[$dbsetting->plugin][$dbsetting->name]->value = $dbsetting->value;
+        // Config plugins.
+        $configplugins = $DB->get_records('config_plugins');
+        foreach ($configplugins as $configplugin) {
+            $sitedbsettings[$configplugin->plugin][$configplugin->name] = new stdClass();
+            $sitedbsettings[$configplugin->plugin][$configplugin->name]->name = $configplugin->name;
+            $sitedbsettings[$configplugin->plugin][$configplugin->name]->value = $configplugin->value;
         }
-
-        return $settings;
+        // Get an array with the common format.
+        return $this->get_settings($sitedbsettings, true, []);
     }
 
-
     /**
-     * Apply a given preset.
+     * Apply plugins from a preset.
      *
      * @param int $presetid The preset identifier to apply.
      * @param bool $simulate Whether this is a simulation or not.
-     * @return array List with an array with the applied settings and another with the skipped ones.
+     * @param int|null $adminpresetapplyid The identifier of the adminpresetapply or null if it hasn't been created previously.
+     * @return array List with an array with the applied settings, another with the skipped ones and the adminpresetapplyid.
      */
-    public function apply_preset(int $presetid, bool $simulate = false): array {
-        global $DB;
+    protected function apply_plugins(int $presetid, bool $simulate = false, ?int $adminpresetapplyid = null): array {
+        global $DB, $USER;
 
-        if (!$DB->get_record('adminpresets', ['id' => $presetid])) {
-            throw new moodle_exception('errornopreset', 'core_adminpresets');
+        $applied = [];
+        $skipped = [];
+
+        $strenabled = get_string('enabled', 'core_adminpresets');
+        $strdisabled = get_string('disabled', 'core_adminpresets');
+
+        $plugins = $DB->get_records('adminpresets_plug', ['adminpresetid' => $presetid]);
+        $pluginmanager = \core_plugin_manager::instance();
+        foreach ($plugins as $plugin) {
+            $pluginclass = \core_plugin_manager::resolve_plugininfo_class($plugin->plugin);
+            $oldvalue = $pluginclass::get_enabled_plugin($plugin->name);
+
+            // Get the plugininfo object for this plugin, to get its proper visible name.
+            $plugininfo = $pluginmanager->get_plugin_info($plugin->plugin . '_' . $plugin->name);
+            if ($plugininfo != null) {
+                $visiblename = $plugininfo->displayname;
+            } else {
+                $visiblename = $plugin->plugin . '_' . $plugin->name;
+            }
+
+            if ($plugin->enabled > 0) {
+                $visiblevalue = $strenabled;
+            } else if ($plugin->enabled == 0) {
+                $visiblevalue = $strdisabled;
+            } else {
+                $visiblevalue = get_string('disabledwithvalue', 'core_adminpresets', $plugin->enabled);
+            }
+
+            $data = [
+                'plugin' => $plugin->plugin,
+                'visiblename' => $visiblename,
+                'visiblevalue' => $visiblevalue,
+            ];
+
+            if ($pluginclass == '\core\plugininfo\orphaned') {
+                $skipped[] = $data;
+                continue;
+            }
+
+            // Only change the plugin visibility if it's different to current value.
+            if (($plugin->enabled != $oldvalue) && (($plugin->enabled > 0 && !$oldvalue) || ($plugin->enabled < 1 && $oldvalue))) {
+                try {
+                    if (!$simulate) {
+                        $pluginclass::enable_plugin($plugin->name, $plugin->enabled);
+
+                        // The preset application it's only saved when values differences are found.
+                        if (empty($adminpresetapplyid)) {
+                            // Save the preset application and store the preset applied id.
+                            $presetapplied = new stdClass();
+                            $presetapplied->adminpresetid = $presetid;
+                            $presetapplied->userid = $USER->id;
+                            $presetapplied->time = time();
+                            if (!$adminpresetapplyid = $DB->insert_record('adminpresets_app', $presetapplied)) {
+                                throw new moodle_exception('errorinserting', 'core_adminpresets');
+                            }
+                        }
+
+                        // Add plugin to aplied plugins table (for being able to restore in the future if required).
+                        $appliedplug = new stdClass();
+                        $appliedplug->adminpresetapplyid = $adminpresetapplyid;
+                        $appliedplug->plugin = $plugin->plugin;
+                        $appliedplug->name = $plugin->name;
+                        $appliedplug->value = $plugin->enabled;
+                        $appliedplug->oldvalue = $oldvalue;
+                        $DB->insert_record('adminpresets_app_plug', $appliedplug);
+                    }
+
+                    if ($oldvalue > 0) {
+                        $oldvisiblevalue = $strenabled;
+                    } else if ($oldvalue == 0) {
+                        $oldvisiblevalue = $strdisabled;
+                    } else {
+                        $oldvisiblevalue = get_string('disabledwithvalue', 'core_adminpresets', $oldvalue);
+                    }
+                    $data['oldvisiblevalue'] = $oldvisiblevalue;
+                    $applied[] = $data;
+                } catch (\exception $e) {
+                    $skipped[] = $data;
+                }
+            } else {
+                $skipped[] = $data;
+            }
         }
 
-        // Apply preset settings.
-        [$settingsapplied, $settingsskipped, $appid] = $this->apply_settings($presetid, $simulate);
-
-        // Set plugins visibility.
-        [$pluginsapplied, $pluginsskipped] = $this->apply_plugins($presetid, $simulate, $appid);
-
-        $applied = array_merge($settingsapplied, $pluginsapplied);
-        $skipped = array_merge($settingsskipped, $pluginsskipped);
-
-        if (!$simulate) {
-            // Store it in a config setting as the last preset applied.
-            set_config('lastpresetapplied', $presetid, 'adminpresets');
-        }
-
-        return [$applied, $skipped];
+        return [$applied, $skipped, $adminpresetapplyid];
     }
 
     /**
@@ -442,10 +778,16 @@ class manager {
         // Sensible settings.
         $sensiblesettings = explode(',', str_replace(' ', '', get_config('adminpresets', 'sensiblesettings')));
         $sensiblesettings = array_combine($sensiblesettings, $sensiblesettings);
+
         foreach ($sitesettings as $plugin => $pluginsettings) {
             foreach ($pluginsettings as $settingname => $sitesetting) {
                 // Avoid sensible data.
                 if (empty($data->includesensiblesettings) && !empty($sensiblesettings["$settingname@@$plugin"])) {
+                    continue;
+                }
+
+                // Skip settings if not checked.
+                if (!optional_param("$settingname@@$plugin", 0, PARAM_BOOL)) {
                     continue;
                 }
 
@@ -630,7 +972,7 @@ class manager {
         // Prepare the preset info.
         $preset = new stdClass();
         foreach (static::$dbxmlrelations as $dbname => $xmlname) {
-            $preset->$dbname = (String) $xml->$xmlname;
+            $preset->$dbname = (string) $xml->$xmlname;
         }
         $preset->userid = $USER->id;
         $preset->timeimported = time();
@@ -699,7 +1041,7 @@ class manager {
                             // Check the attribute existence.
                             if (!isset($itemattributenames[$attrname])) {
                                 debugging('The ' . $plugin . '/' . $name . ' attribute ' . $attrname .
-                                        ' is not supported by this Moodle version', DEBUG_DEVELOPER);
+                                    ' is not supported by this Moodle version', DEBUG_DEVELOPER);
                                 continue;
                             }
 
@@ -961,223 +1303,14 @@ class manager {
 
         // Delete application if no items nor attributes nor plugins of the application remains.
         if (!$DB->get_records('adminpresets_app_it', ['adminpresetapplyid' => $presetappid]) &&
-                !$DB->get_records('adminpresets_app_it_a', ['adminpresetapplyid' => $presetappid]) &&
-                !$DB->get_records('adminpresets_app_plug', ['adminpresetapplyid' => $presetappid])) {
+            !$DB->get_records('adminpresets_app_it_a', ['adminpresetapplyid' => $presetappid]) &&
+            !$DB->get_records('adminpresets_app_plug', ['adminpresetapplyid' => $presetappid])) {
 
             $presetapp = $DB->get_record('adminpresets_app', ['id' => $presetappid]);
             $DB->delete_records('adminpresets_app', ['id' => $presetappid]);
         }
 
         return [$presetapp, $rollback, $failures];
-    }
-
-    /**
-     * Apply settings from a preset.
-     *
-     * @param int $presetid The preset identifier to apply.
-     * @param bool $simulate Whether this is a simulation or not.
-     * @param int|null $adminpresetapplyid The identifier of the adminpresetapply or null if it hasn't been created previously.
-     * @return array List with an array with the applied settings, another with the skipped ones and the adminpresetapplyid.
-     */
-    protected function apply_settings(int $presetid, bool $simulate = false, ?int $adminpresetapplyid = null): array {
-        global $DB, $USER;
-
-        $applied = [];
-        $skipped = [];
-        if (!$items = $DB->get_records('adminpresets_it', ['adminpresetid' => $presetid])) {
-            return [$applied, $skipped, $adminpresetapplyid];
-        }
-
-        $presetdbsettings = $this->get_settings_from_db($items);
-        // Standarized format: $array['plugin']['settingname'] = child class.
-        $presetsettings = $this->get_settings($presetdbsettings, false, []);
-
-        // Standarized format: $array['plugin']['settingname'] = child class.
-        $siteavailablesettings = $this->get_site_settings();
-
-        // Set settings values.
-        foreach ($presetsettings as $plugin => $pluginsettings) {
-            foreach ($pluginsettings as $settingname => $presetsetting) {
-                $updatesetting = false;
-
-                // Current value (which will become old value if the setting is legit to be applied).
-                $sitesetting = $siteavailablesettings[$plugin][$settingname];
-
-                // Wrong setting, set_value() method has previously cleaned the value.
-                if ($sitesetting->get_value() === false) {
-                    debugging($presetsetting->get_settingdata()->plugin . '/' . $presetsetting->get_settingdata()->name .
-                            ' setting has a wrong value!', DEBUG_DEVELOPER);
-                    continue;
-                }
-
-                // If the new value is different the setting must be updated.
-                if ($presetsetting->get_value() != $sitesetting->get_value()) {
-                    $updatesetting = true;
-                }
-
-                // If one of the setting attributes values is different, setting must also be updated.
-                if ($presetsetting->get_attributes_values()) {
-
-                    $siteattributesvalues = $presetsetting->get_attributes_values();
-                    foreach ($presetsetting->get_attributes_values() as $attributename => $attributevalue) {
-
-                        if ($attributevalue !== $siteattributesvalues[$attributename]) {
-                            $updatesetting = true;
-                        }
-                    }
-                }
-
-                $visiblepluginname = $presetsetting->get_settingdata()->plugin;
-                if ($visiblepluginname == 'none') {
-                    $visiblepluginname = 'core';
-                }
-                $data = [
-                    'plugin' => $visiblepluginname,
-                    'visiblename' => $presetsetting->get_settingdata()->visiblename,
-                    'visiblevalue' => $presetsetting->get_visiblevalue(),
-                ];
-
-                // Saving data.
-                if ($updatesetting) {
-                    // The preset application it's only saved when differences (in their values) are found.
-                    if (empty($applieditem)) {
-                        // Save the preset application and store the preset applied id.
-                        $presetapplied = new stdClass();
-                        $presetapplied->adminpresetid = $presetid;
-                        $presetapplied->userid = $USER->id;
-                        $presetapplied->time = time();
-                        if (!$simulate && !$adminpresetapplyid = $DB->insert_record('adminpresets_app', $presetapplied)) {
-                            throw new moodle_exception('errorinserting', 'core_adminpresets');
-                        }
-                    }
-
-                    // Implemented this way because the config_write method of admin_setting class does not return the
-                    // config_log inserted id.
-                    $applieditem = new stdClass();
-                    $applieditem->adminpresetapplyid = $adminpresetapplyid;
-                    if (!$simulate && $applieditem->configlogid = $presetsetting->save_value()) {
-                        $DB->insert_record('adminpresets_app_it', $applieditem);
-                    }
-
-                    // For settings with multiple values.
-                    if (!$simulate && $attributeslogids = $presetsetting->save_attributes_values()) {
-                        foreach ($attributeslogids as $attributelogid) {
-                            $applieditemattr = new stdClass();
-                            $applieditemattr->adminpresetapplyid = $applieditem->adminpresetapplyid;
-                            $applieditemattr->configlogid = $attributelogid;
-                            $applieditemattr->itemname = $presetsetting->get_settingdata()->name;
-                            $DB->insert_record('adminpresets_app_it_a', $applieditemattr);
-                        }
-                    }
-
-                    // Added to changed values.
-                    $data['oldvisiblevalue'] = $sitesetting->get_visiblevalue();
-                    $applied[] = $data;
-                } else {
-                    // Unnecessary changes (actual setting value).
-                    $skipped[] = $data;
-                }
-            }
-        }
-        return [$applied, $skipped, $adminpresetapplyid];
-    }
-
-    /**
-     * Apply plugins from a preset.
-     *
-     * @param int $presetid The preset identifier to apply.
-     * @param bool $simulate Whether this is a simulation or not.
-     * @param int|null $adminpresetapplyid The identifier of the adminpresetapply or null if it hasn't been created previously.
-     * @return array List with an array with the applied settings, another with the skipped ones and the adminpresetapplyid.
-     */
-    protected function apply_plugins(int $presetid, bool $simulate = false, ?int $adminpresetapplyid = null): array {
-        global $DB, $USER;
-
-        $applied = [];
-        $skipped = [];
-
-        $strenabled = get_string('enabled', 'core_adminpresets');
-        $strdisabled = get_string('disabled', 'core_adminpresets');
-
-        $plugins = $DB->get_records('adminpresets_plug', ['adminpresetid' => $presetid]);
-        $pluginmanager = \core_plugin_manager::instance();
-        foreach ($plugins as $plugin) {
-            $pluginclass = \core_plugin_manager::resolve_plugininfo_class($plugin->plugin);
-            $oldvalue = $pluginclass::get_enabled_plugin($plugin->name);
-
-            // Get the plugininfo object for this plugin, to get its proper visible name.
-            $plugininfo = $pluginmanager->get_plugin_info($plugin->plugin . '_' . $plugin->name);
-            if ($plugininfo != null) {
-                $visiblename = $plugininfo->displayname;
-            } else {
-                $visiblename = $plugin->plugin . '_' . $plugin->name;
-            }
-
-            if ($plugin->enabled > 0) {
-                $visiblevalue = $strenabled;
-            } else if ($plugin->enabled == 0) {
-                $visiblevalue = $strdisabled;
-            } else {
-                $visiblevalue = get_string('disabledwithvalue', 'core_adminpresets', $plugin->enabled);
-            }
-
-            $data = [
-                'plugin' => $plugin->plugin,
-                'visiblename' => $visiblename,
-                'visiblevalue' => $visiblevalue,
-            ];
-
-            if ($pluginclass == '\core\plugininfo\orphaned') {
-                $skipped[] = $data;
-                continue;
-            }
-
-            // Only change the plugin visibility if it's different to current value.
-            if (($plugin->enabled != $oldvalue) && (($plugin->enabled > 0 && !$oldvalue) || ($plugin->enabled < 1 && $oldvalue))) {
-                try {
-                    if (!$simulate) {
-                        $pluginclass::enable_plugin($plugin->name, $plugin->enabled);
-
-                        // The preset application it's only saved when values differences are found.
-                        if (empty($adminpresetapplyid)) {
-                            // Save the preset application and store the preset applied id.
-                            $presetapplied = new stdClass();
-                            $presetapplied->adminpresetid = $presetid;
-                            $presetapplied->userid = $USER->id;
-                            $presetapplied->time = time();
-                            if (!$adminpresetapplyid = $DB->insert_record('adminpresets_app', $presetapplied)) {
-                                throw new moodle_exception('errorinserting', 'core_adminpresets');
-                            }
-                        }
-
-                        // Add plugin to aplied plugins table (for being able to restore in the future if required).
-                        $appliedplug = new stdClass();
-                        $appliedplug->adminpresetapplyid = $adminpresetapplyid;
-                        $appliedplug->plugin = $plugin->plugin;
-                        $appliedplug->name = $plugin->name;
-                        $appliedplug->value = $plugin->enabled;
-                        $appliedplug->oldvalue = $oldvalue;
-                        $DB->insert_record('adminpresets_app_plug', $appliedplug);
-                    }
-
-                    if ($oldvalue > 0) {
-                        $oldvisiblevalue = $strenabled;
-                    } else if ($oldvalue == 0) {
-                        $oldvisiblevalue = $strdisabled;
-                    } else {
-                        $oldvisiblevalue = get_string('disabledwithvalue', 'core_adminpresets', $oldvalue);
-                    }
-                    $data['oldvisiblevalue'] = $oldvisiblevalue;
-                    $applied[] = $data;
-                } catch (\exception $e) {
-                    $skipped[] = $data;
-                }
-            } else {
-                $skipped[] = $data;
-            }
-        }
-
-        return [$applied, $skipped, $adminpresetapplyid];
     }
 
 }

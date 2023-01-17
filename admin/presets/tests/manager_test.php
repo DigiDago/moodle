@@ -768,4 +768,48 @@ class manager_test extends \advanced_testcase {
         $enabledplugins = \core\plugininfo\qtype::get_enabled_plugins();
         $this->assertArrayHasKey('truefalse', $enabledplugins);
     }
+
+
+    /**
+     * Test the behaviour of get_site_settings() method.
+     *
+     * @covers ::get_site_settings
+     */
+    public function test_get_site_settings() {
+        global $DB;
+
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        // Call the method to be tested.
+        $manager = new manager();
+
+        $dbconfig = [
+            'name1' => (object) ['name' => 'name1', 'value' => 'value1'],
+            'name2' => (object) ['name' => 'name2', 'value' => 'value2'],
+        ];
+        $DB->insert_records('config', $dbconfig);
+        $frontpagevalues = (object) [
+            'fullname' => 'Full name',
+            'shortname' => 'Short name',
+            'summary' => 'Summary',
+        ];
+        $DB->update_record('course', $frontpagevalues, ['id' => SITEID]);
+        $configplugins = [
+            (object) ['plugin' => 'plugin1', 'name' => 'name1', 'value' => 'value1'],
+            (object) ['plugin' => 'plugin2', 'name' => 'name2', 'value' => 'value2'],
+        ];
+        $DB->insert_records('config_plugins', $configplugins);
+        // Call the function being tested.
+        $settings = $manager->get_site_settings();
+
+        // Check that the returned values are as expected.
+        $this->assertEquals($settings['none']['name1']->value, 'value1');
+        $this->assertEquals($settings['none']['name2']->value, 'value2');
+        $this->assertEquals($settings['none']['fullname']->value, 'Full name');
+        $this->assertEquals($settings['none']['shortname']->value, 'Short name');
+        $this->assertEquals($settings['none']['summary']->value, 'Summary');
+        $this->assertEquals($settings['plugin1']['name1']->value, 'value1');
+        $this->assertEquals($settings['plugin2']['name2']->value, 'value2');
+    }
 }

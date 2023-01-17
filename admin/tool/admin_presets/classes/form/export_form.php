@@ -34,7 +34,7 @@ require_once($CFG->dirroot . '/lib/formslib.php');
 class export_form extends moodleform {
 
     public function definition(): void {
-        global $USER;
+        global $USER, $OUTPUT;
 
         $mform = &$this->_form;
 
@@ -55,6 +55,13 @@ class export_form extends moodleform {
             get_string('includesensiblesettings', 'tool_admin_presets'));
         $mform->setDefault('includesensiblesettings', 0);
         $mform->addHelpButton('includesensiblesettings', 'includesensiblesettings', 'tool_admin_presets');
+
+        // Moodle settings table.
+        $mform->addElement('header', 'general',
+            get_string('adminsettings', 'tool_admin_presets'));
+
+        $icon = $OUTPUT->pix_icon('i/loading_small', get_string('loading', 'tool_admin_presets'));
+        $mform->addElement('html', '<div id="settings_tree_div" class="ygtv-checkbox" role="tree">' . $icon . '</div>');
 
         $this->add_action_buttons(true, get_string('actionexportbutton', 'tool_admin_presets'));
     }

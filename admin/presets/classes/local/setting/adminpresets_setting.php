@@ -265,4 +265,58 @@ class adminpresets_setting {
 
         return $id;
     }
+
+    /**
+     * Returns the TreeView node identifier string
+     *
+     * @return string
+     *
+     */
+    public function get_id(): string {
+        return $this->settingdata->name . '@@' . $this->settingdata->plugin;
+    }
+
+    public function get_text(): string {
+        return $this->encode_string($this->text);
+    }
+
+    /**
+     * Encodes a string to send it to js
+     *
+     * @param string $string
+     * @return string
+     */
+    public function encode_string($string): string {
+
+        return rawurlencode($string);
+    }
+
+    public function get_description(): string {
+        // PARAM_TEXT clean because the alt attribute does not support html.
+        $description = clean_param($this->settingdata->description, PARAM_TEXT);
+        return $this->encode_string($description);
+    }
+
+    /**
+     * Sets the text to display on the settings tree
+     *
+     * Default format: I'm a setting visible name (setting value: "VALUE")
+     *
+     * @return void
+     *
+     */
+    public function set_text(): void {
+
+        $this->set_visiblevalue();
+        $this->text = '';
+
+        if ($this->settingdata->visiblename && !$this->visiblevalue) {
+            $this->visiblevalue = get_string('novalue', 'tool_admin_presets');
+        }
+
+        if ($this->settingdata->visiblename && $this->visiblevalue) {
+            $this->text .= '<div class="admin_presets_tree_name">' . $this->settingdata->visiblename . '</div>';
+            $this->text .= '<div class="admin_presets_tree_value">' . $this->visiblevalue . '</div>';
+        }
+    }
 }
