@@ -96,3 +96,4 @@ $string['wrongfile'] = 'Wrong file';
 $string['loading'] = 'Loading';
 $string['adminsettings'] = 'Admin settings';
 $string['novalue'] = 'None';
+$string['adminsettingsplugin'] = 'Plugin settings';

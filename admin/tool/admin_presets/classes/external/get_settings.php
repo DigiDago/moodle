@@ -53,13 +53,24 @@ class get_settings extends external_api {
      * @return array of system settings
      */
     public static function execute(): array {
-        global $PAGE, $DB;
+        global $PAGE;
         $PAGE->set_context(context_system::instance());
         $manager = new manager();
+        $data = [];
 
         $settings = $manager->get_site_settings();
 
-        return $manager->get_settings_branches($settings);
+        $plugins = $manager->get_site_plugins();
+
+        if ($settings) {
+            $data['settings'] = $manager->get_settings_branches($settings);
+        }
+
+        if ($plugins) {
+            $data['plugins'] = $manager->get_plugins_branches($plugins);
+        }
+
+        return $data;
     }
 
     /**
@@ -69,21 +80,40 @@ class get_settings extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'ids' => new external_multiple_structure(
-                new external_value(PARAM_TEXT, 'Setting id')
-            ),
-            'descriptions' => new external_multiple_structure(
-                new external_value(PARAM_TEXT, 'Setting description')
-            ),
-            'labels' => new external_multiple_structure(
-                new external_value(PARAM_TEXT, 'Setting label')
-            ),
-            'nodes' => new external_multiple_structure(
-                new external_value(PARAM_TEXT, 'Nodes key')
-            ),
-            'parents' => new external_multiple_structure(
-                new external_value(PARAM_TEXT, 'Setting parent')
-            ),
+            'settings' => new external_single_structure([
+                'ids' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Setting id')
+                ),
+                'descriptions' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Setting description')
+                ),
+                'labels' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Setting label')
+                ),
+                'nodes' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Nodes key')
+                ),
+                'parents' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Setting parent')
+                ),
+            ]),
+            'plugins' => new external_single_structure([
+                'ids' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Setting id')
+                ),
+                'descriptions' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Setting description')
+                ),
+                'labels' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Setting label')
+                ),
+                'nodes' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Nodes key')
+                ),
+                'parents' => new external_multiple_structure(
+                    new external_value(PARAM_TEXT, 'Setting parent')
+                )
+            ]),
         ]);
     }
 }

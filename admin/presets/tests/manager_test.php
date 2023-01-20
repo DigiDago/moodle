@@ -759,7 +759,7 @@ class manager_test extends \advanced_testcase {
         $this->assertEquals(1, get_config('core', 'enablecompletion'));
         $this->assertEquals(0, get_config('core', 'usecomments'));
 
-        // Check the plugins visibility have been reverted accordingly.
+        // Check the plugin visibility have been reverted accordingly.
         $enabledplugins = \core\plugininfo\enrol::get_enabled_plugins();
         $this->assertArrayHasKey('guest', $enabledplugins);
         $enabledplugins = \core\plugininfo\mod::get_enabled_plugins();

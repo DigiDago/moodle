@@ -73,6 +73,7 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
 
         this.rootNode.innerHTML = "";
         let promises = [];
+
         // Add all nodes to the Tree.
         for (let i = 0; i < nelements; i++) {
 
@@ -260,6 +261,7 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
         return new Promise((resolve, reject) => {
             let node = this.nodes[nodeId];
             // If the elements is not yet displayed.
+
             if (!node.displayed && !node.isEmpty()) {
                 let parentElement = null;
                 // Take the root node of the tree if the Node hasn't parent.
@@ -296,6 +298,17 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
                     }
                 }
 
+                // Get settings nbr.
+                let settingsnbr = 0;
+                if (node.hasChildren()) {
+                    let countsetting = 0;
+                    node.children.forEach((childNode) => {
+                        // Count checked child.
+                        countsetting = countsetting + this.getSettingsNbr(childNode.id);
+                    });
+                    settingsnbr = countsetting;
+                }
+
                 let newNode = {
                     "id": node.id,
                     "level": node.level,
@@ -303,7 +316,7 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
                     "has_children": haschildren,
                     "checked": checked,
                     "setting": issetting,
-                    "settingsnumber": node.children.length,
+                    "settingsnumber": settingsnbr,
                     "padding": node.padding
                 };
 
@@ -329,6 +342,33 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
     };
 
     /**
+     * Get the settings number for this node and all child.
+     *
+     * @param {string} nodeId Id of the node.
+     *
+     * @return {int} settingsnbr nbr of settings.
+     */
+    Tree.prototype.getSettingsNbr = function(nodeId) {
+        let node = this.nodes[nodeId];
+
+        let countsettings = 0;
+
+        if (node.settingId === 'setting') {
+            countsettings++;
+        }
+
+        // Modify all children.
+        if (node.hasChildren()) {
+            node.children.forEach((childNode) => {
+                // Count checked child.
+                countsettings = countsettings + this.getSettingsNbr(childNode.id);
+            });
+        }
+
+        return countsettings;
+    };
+
+    /**
      * Set the property checked on the node and his children.
      *
      * @param {string} nodeId Id of the node.
@@ -348,6 +388,7 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
         // Modify all children.
         if (node.hasChildren()) {
             node.children.forEach((childNode) => {
+                // Count checked child.
                 this.setChecked(childNode.id, checked);
             });
         }
@@ -409,16 +450,28 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
                 methodname: this.ajaxmethodname,
                 args: {}
             }], true, true)[0].done((response) => {
+
                     // Make the tree with settings retrieved.
-                    let tree = new Tree('settings_tree_div');
-                    tree.init(response.ids,
-                        response.nodes,
-                        response.labels,
-                        response.descriptions,
-                        response.parents);
+                    let treesettings = new Tree('settings_tree_div');
+                    treesettings.init(
+                        response.settings.ids,
+                        response.settings.nodes,
+                        response.settings.labels,
+                        response.settings.descriptions,
+                        response.settings.parents);
+
+                    // Make the tree with settings retrieved.
+                    let treeplugins = new Tree('settingsplugin_tree_div');
+                    treeplugins.init(
+                        response.plugins.ids,
+                        response.plugins.nodes,
+                        response.plugins.labels,
+                        response.plugins.descriptions,
+                        response.plugins.parents);
 
                     // Set the submit event.
-                    tree.submit('id_submitbutton');
+                    treesettings.submit('id_submitbutton');
+                    treeplugins.submit('id_submitbutton');
                 }
             );
         }

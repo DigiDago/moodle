@@ -129,37 +129,6 @@ class manager {
     private $adminroot;
 
     /**
-     * Gets the javascript to populate the settings tree
-     *
-     * @param array $settings Array format $array['plugin']['settingname'] = settings_types child class
-     * @return array Array of settings data ids, nodes, labels, descriptions and parents.
-     */
-    public function get_settings_branches(array $settings): array {
-
-        // Nodes should be added in hierarchical order.
-        $nodes = ['categories' => [], 'pages' => [], 'settings' => []];
-        $nodes = $this->get_settings_elements($settings, false, false, $nodes);
-
-        $levels = ['categories', 'pages', 'settings'];
-        foreach ($levels as $level) {
-            foreach ($nodes[$level] as $data) {
-                $ids[] = $data['type'];
-                $nodeids[] = $data['nodename'];
-                $labels[] = $data['nodetext'];
-                $descriptions[] = $data['description'];
-                $parents[] = $data['parents'];
-            }
-        }
-        return [
-            'ids' => $ids,
-            'nodes' => $nodeids,
-            'labels' => $labels,
-            'descriptions' => $descriptions,
-            'parents' => $parents
-        ];
-    }
-
-    /**
      * Gets the html code to select the settings to export/import/load
      *
      * @param array $allsettings Array format $array['plugin']['settingname'] = settings_types child class
@@ -187,7 +156,7 @@ class manager {
         }
 
         // Iterates through children.
-        foreach ($admintree as $key => $child) {
+        foreach ($admintree as $child) {
             $pagesettings = [];
 
             // We must search category children.
@@ -830,6 +799,11 @@ class manager {
                     $entry->name = $pluginname;
                     $entry->enabled = $pluginclass::get_enabled_plugin($pluginname);
 
+                    // Skip settings if not checked.
+                    if (!optional_param("$pluginname@@$plugintype", 0, PARAM_BOOL)) {
+                        continue;
+                    }
+
                     $DB->insert_record('adminpresets_plug', $entry);
                     $pluginsfound = true;
                 }
@@ -1311,6 +1285,105 @@ class manager {
         }
 
         return [$presetapp, $rollback, $failures];
+    }
+
+    /**
+     * Gets the javascript to populate the settings tree
+     *
+     * @param array $settings Array format $array['plugin']['settingname'] = settings_types child class
+     * @return array Array of settings data ids, nodes, labels, descriptions and parents.
+     */
+    public function get_settings_branches(array $settings): array {
+
+        // Nodes should be added in hierarchical order.
+        $nodes = ['categories' => [], 'pages' => [], 'settings' => []];
+        $nodes = $this->get_settings_elements($settings, false, false, $nodes);
+
+        $levels = ['categories', 'pages', 'settings'];
+        foreach ($levels as $level) {
+            foreach ($nodes[$level] as $data) {
+                $ids[$data['nodename']] = $data['type'];
+                $nodeids[$data['nodename']] = $data['nodename'];
+                $labels[$data['nodename']] = $data['nodetext'];
+                $descriptions[$data['nodename']] = $data['description'];
+                $parents[$data['nodename']] = $data['parents'];
+            }
+        }
+
+        return [
+            'ids' => $ids,
+            'nodes' => $nodeids,
+            'labels' => $labels,
+            'descriptions' => $descriptions,
+            'parents' => $parents,
+            'settingsnbr' => $settingsnbr
+        ];
+    }
+
+    /**
+     * Get plugins data.
+     *
+     * @return stdClass $settings Array format $array['plugin']['pluginname'] = settings_types child class
+     **/
+    public function get_site_plugins(): stdClass {
+
+        $dataplugin = new stdClass();
+        $pluginmanager = \core_plugin_manager::instance();
+        $types = $pluginmanager->get_plugin_types();
+        foreach ($types as $plugintype => $notused) {
+
+            $plugins = $pluginmanager->get_present_plugins($plugintype);
+            $pluginclass = \core_plugin_manager::resolve_plugininfo_class($plugintype);
+
+            if (!empty($plugins)) {
+
+                foreach ($plugins as $pluginname => $plugin) {
+
+                    $entry = [];
+                    $entry['type'] = $plugintype;
+                    $entry['name'] = $pluginname;
+                    $entry['enabled'] = $pluginclass::get_enabled_plugin($pluginname);
+                    $dataplugin->{$entry['type']}->list->{$entry['name']} = $entry;
+                    $dataplugin->{$entry['type']}->plugintype = $plugintype;
+                }
+            }
+        }
+
+        return $dataplugin;
+    }
+
+    /**
+     * Gets the javascript to populate the plugins tree
+     *
+     * @param stdClass $plugins Array format $array['plugin']['settingname'] = plugins child class
+     * @return array Array of settings data ids, nodes, labels, descriptions and parents.
+     */
+    public function get_plugins_branches(stdClass $plugins): array {
+
+        foreach ($plugins as $key => $plugin) {
+
+            $ids[$key] = 'category';
+            $nodeids[$key] = $key . 'Node';
+            $labels[$key] = $plugin->plugintype;
+            $descriptions[$key] = '';
+            $parents[$key] = 'root';
+
+            foreach ($plugin->list as $data) {
+                $ids[] = 'setting';
+                $nodeids[] = $data['name'] . "@@" . $plugin->plugintype;
+                $labels[] = $data['name'];
+                $descriptions[] = '';
+                $parents[] = $key . 'Node';
+            }
+        }
+
+        return [
+            'ids' => $ids,
+            'nodes' => $nodeids,
+            'labels' => $labels,
+            'descriptions' => $descriptions,
+            'parents' => $parents,
+        ];
     }
 
 }
