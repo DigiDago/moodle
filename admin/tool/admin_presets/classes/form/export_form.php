@@ -61,14 +61,25 @@ class export_form extends moodleform {
             get_string('adminsettings', 'tool_admin_presets'));
 
         $icon = $OUTPUT->pix_icon('i/loading_small', get_string('loading', 'tool_admin_presets'));
-        $mform->addElement('html', '<div id="settings_tree_div" class="ygtv-checkbox preset_tree" role="tree">' . $icon . '</div>');
+        $templatecontext = [
+            'icon' => $icon,
+            'treeId' => 'settings_tree_div'
+        ];
+        $html = $OUTPUT->render_from_template('tool_admin_presets/form-treesettings', $templatecontext);
+
+        $mform->addElement('html', $html);
 
         // Moodle settings table.
         $mform->addElement('header', 'plugins_tree',
             get_string('adminsettingsplugin', 'tool_admin_presets'));
 
-        $icon = $OUTPUT->pix_icon('i/loading_small', get_string('loading', 'tool_admin_presets'));
-        $mform->addElement('html', '<div id="settingsplugin_tree_div" class="ygtv-checkbox preset_tree" role="tree">' . $icon . '</div>');
+        $templatecontext = [
+            'icon' => $icon,
+            'treeId' => 'settingsplugin_tree_div'
+        ];
+        $html = $OUTPUT->render_from_template('tool_admin_presets/form-treesettings', $templatecontext);
+
+        $mform->addElement('html', $html);
 
         $this->add_action_buttons(true, get_string('actionexportbutton', 'tool_admin_presets'));
     }

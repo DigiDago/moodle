@@ -242,7 +242,6 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
                             let parent = $(event.target).parents('div[role=treeitem]');
                             parent.focus();
                         }
-
                         return;
                     }
 
@@ -322,6 +321,7 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
 
                 // Add the node in the DOM.
                 Templates.render('tool_admin_presets/tree_node', newNode).then((html) => {
+
                     parentElement.insertAdjacentHTML('beforeend', html);
 
                     // Mark the node displayed.
@@ -329,6 +329,13 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
 
                     // Apply click event on the element.
                     this.applyEvent(nodeId);
+
+                    // Add padding level.
+                    if (newNode.setting === true) {
+                        let escapeId = newNode.id.replace('@@', '\\@\\@');
+                        document.querySelectorAll('#' + escapeId + " .admin_presets_tree_name")[0]
+                            .style.padding = "0px 0px 0px " + newNode.padding + 'px';
+                    }
 
                     resolve(true);
                 }).fail(function(ex) {

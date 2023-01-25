@@ -20,7 +20,10 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
         "level": 1,
         "label": Course,
         "has_children", "has-children",
-        "checked", "checkbox-checked"
+        "checked", true
+        "setting", true
+        "settingsnumber", 1
+        "padding", 20
     }
 }}
 
@@ -29,7 +32,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
         <a class='collapse_link collapsed' data-toggle="collapse" href="#{{{ id }}}_group" aria-expanded="false" aria-owns="{{{ id }}}_group">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-10" style="padding-left: {{{padding}}}px;">
+                    <div class="col-9" style="padding-left: {{{padding}}}px;">
                         <span class="expanded-icon icon-no-margin p-2" title="{{#str}} collapse, core {{/str}}">
                             {{#pix}} t/expandedchevron, core {{/pix}}
                         </span>
@@ -45,10 +48,10 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
                             {{{ label }}}
                         </label>
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-2 text-center">
                         {{{settingsnumber}}}
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-1">
                         <input type="checkbox" id="{{{ id }}}_checkbox" {{#checked}}checked{{/checked}} role="checkbox" name="{{{ id }}}"/>
                     </div>
                 </div>
@@ -60,14 +63,15 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
         <div class="d-flex w-100 setting_element">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-10" style="padding-left: {{{padding}}}px;">
-                        <label class="p-2 {{#checked }}active{{/checked}}" for="{{{ id }}}_checkbox">
-                            {{{ label }}}
-                        </label>
+                    <div class="col-9">
+                        <div class="container-fluid">
+                            <div class="row">
+                                {{{ label }}}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-sm-1">
+                    <div class="col-2"></div>
+                    <div class="col-1">
                         <input type="checkbox" id="{{{ id }}}_checkbox" {{#checked}}checked{{/checked}} role="checkbox" name="{{{ id }}}"/>
                     </div>
                 </div>
