@@ -388,8 +388,16 @@ define(['core/ajax', 'core/tree', 'core/templates', 'jquery'], (Ajax, TreeAccess
         // Change the checkbox apparence.
         if (node.displayed) {
             let checkboxElement = document.getElementById(nodeId + '_checkbox');
-            checkboxElement.checked = checked;
             // Check the node.
+            checkboxElement.checked = checked;
+
+            // Add or remove active class.
+            let escapeId = nodeId.replace('@@', '\\@\\@');
+            if (checked) {
+                document.querySelector('label[for=' + escapeId + '_checkbox' + ']').classList.add('active');
+            } else {
+                document.querySelector('label[for=' + escapeId + '_checkbox' + ']').classList.remove('active');
+            }
         }
 
         // Modify all children.
