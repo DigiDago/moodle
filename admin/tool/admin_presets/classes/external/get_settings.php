@@ -18,6 +18,7 @@
  * Define some function for AJAX request
  *
  * @package          tool_admin_presets
+ * @copyright        2023 Pimenko <support@pimenko.com><pimenko.com>
  * @author           Jordan Kesraoui | Sylvain Revenu | Pimenko based on David Monllaó <david.monllao@urv.cat> code
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

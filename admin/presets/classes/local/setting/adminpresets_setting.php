@@ -69,6 +69,13 @@ class adminpresets_setting {
     protected $attributesvalues;
 
     /**
+     * Html text with setting name and value
+     *
+     * @var string
+     */
+    protected $text;
+
+    /**
      * Stores the setting data and the selected value
      *
      * @param admin_setting $settingdata admin_setting subclass
@@ -77,6 +84,8 @@ class adminpresets_setting {
     public function __construct(admin_setting $settingdata, $dbsettingvalue) {
         $this->settingdata = $settingdata;
         $this->delegation = new delegation();
+        $this->text = '';
+
 
         if ($this->settingdata->plugin == '') {
             $this->settingdata->plugin = 'none';
@@ -276,6 +285,11 @@ class adminpresets_setting {
         return $this->settingdata->name . '@@' . $this->settingdata->plugin;
     }
 
+    /**
+     * Get the text to display on the settings tree
+     *
+     * @return string
+     */
     public function get_text(): string {
         return $this->encode_string($this->text);
     }
@@ -308,7 +322,6 @@ class adminpresets_setting {
     public function set_text(): void {
 
         $this->set_visiblevalue();
-        $this->text = '';
 
         if ($this->settingdata->visiblename && !$this->visiblevalue) {
             $this->visiblevalue = get_string('novalue', 'tool_admin_presets');

@@ -1315,8 +1315,7 @@ class manager {
             'nodes' => $nodeids,
             'labels' => $labels,
             'descriptions' => $descriptions,
-            'parents' => $parents,
-            'settingsnbr' => $settingsnbr
+            'parents' => $parents
         ];
     }
 
@@ -1343,6 +1342,8 @@ class manager {
                     $entry['type'] = $plugintype;
                     $entry['name'] = $pluginname;
                     $entry['enabled'] = $pluginclass::get_enabled_plugin($pluginname);
+                    $dataplugin->{$entry['type']} = new stdClass();
+                    $dataplugin->{$entry['type']}->list = new stdClass();
                     $dataplugin->{$entry['type']}->list->{$entry['name']} = $entry;
                     $dataplugin->{$entry['type']}->plugintype = $plugintype;
                 }

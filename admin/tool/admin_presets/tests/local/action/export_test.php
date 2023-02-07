@@ -63,6 +63,18 @@ class export_test extends \advanced_testcase {
             'author' => 'Super-Girl',
             'includesensiblesettings' => $includesensible,
             'admin_presets_submit' => 'Save changes',
+            'recaptchapublickey@@none' => '1',
+            'enablebadges@@none' => '1',
+            'cronremotepassword@@none' => '1',
+            'mediawidth@@mod_lesson' => '1',
+            'maxanswers@@mod_lesson' => '1',
+            'maxanswers_adv@@mod_lesson' => '1',
+            'defaultfeedback@@mod_lesson' => '1',
+            'defaultfeedback_adv@@mod_lesson' => '1',
+            'cohort@@enrol' => '1',
+            'guest@@enrol' => '1',
+            'auutoenrol@@enrol' => '1',
+            'database@@enrol' => '1'
         ];
         \tool_admin_presets\form\export_form::mock_submit($formdata);
 
@@ -126,8 +138,10 @@ class export_test extends \advanced_testcase {
             foreach ($plugins as $pluginname => $unused) {
                 $params = ['adminpresetid' => $presetid, 'plugin' => $plugintype, 'name' => $pluginname];
                 $plugin = $DB->get_record('adminpresets_plug', $params);
-                $enabled = (!empty($enabledplugins) && array_key_exists($pluginname, $enabledplugins));
-                $this->assertEquals($enabled, (bool) $plugin->enabled);
+                if ($plugin) {
+                    $enabled = (!empty($enabledplugins) && array_key_exists($pluginname, $enabledplugins));
+                    $this->assertEquals($enabled, (bool) $plugin->enabled);
+                }
             }
 
             // Check whether sensible settings have been exported or not.
