@@ -244,9 +244,9 @@ class adminpresets_setting_test extends \advanced_testcase {
 
         $adminpresetsetting->set_text();
 
-        $text .= '<div class="admin_presets_tree_name col-sm-6">' .
+        $text .= '<div class="admin_presets_tree_name col-sm-8">' .
             '<label class="p-2" for="settingforphpunit@@testforphpunit_checkbox">Lorem</label></div>';
-        $text .= '<div class="admin_presets_tree_value col-sm-6">The answer to life</div>';
+        $text .= '<div class="admin_presets_tree_value col-sm-4 text-truncate">The answer to life</div>';
         $encodedtext = rawurlencode($text);
 
         $settingtext = $adminpresetsetting->get_text();

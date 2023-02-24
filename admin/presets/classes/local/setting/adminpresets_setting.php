@@ -328,10 +328,10 @@ class adminpresets_setting {
         }
 
         if ($this->settingdata->visiblename && $this->visiblevalue) {
-            $this->text .= '<div class="admin_presets_tree_name col-sm-6">' .
+            $this->text .= '<div class="admin_presets_tree_name col-sm-8">' .
                 '<label class="p-2" for="' . $this->get_id() . '_checkbox">' .
                 $this->settingdata->visiblename . '</label></div>';
-            $this->text .= '<div class="admin_presets_tree_value col-sm-6">' . $this->visiblevalue . '</div>';
+            $this->text .= '<div class="admin_presets_tree_value col-sm-4 text-truncate">' . $this->visiblevalue . '</div>';
         }
     }
 }

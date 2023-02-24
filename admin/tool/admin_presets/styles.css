@@ -35,8 +35,12 @@
     text-transform: capitalize;
 }
 
+.admin_presets_tree_value {
+    border: 0;
+}
+
 .tree_header.container-fluid {
-    padding: 15px 15px 15px 45px;
+    padding: 10px 15px 10px 45px;
     font-weight: 400;
     font-size: 14px;
     color: var(--gray);
@@ -53,4 +57,15 @@
 .path-admin-tool-admin_presets div.preset_tree div[role='treeitem'] a.collapse_link label.active {
     /* Content/Primary */
     color: var(--primary);
+}
+
+.path-admin-tool-admin_presets div.preset_tree div[role='treeitem'] a.collapse_link label {
+    margin-bottom: 0;
+}
+
+#id_settings_tree,
+#id_plugins_tree {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 0;
 }
