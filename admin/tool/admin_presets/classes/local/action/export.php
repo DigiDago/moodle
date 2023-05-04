@@ -44,6 +44,10 @@ class export extends base {
      * the settings in a hierarchical table
      */
     public function show(): void {
+        global $PAGE;
+
+        $PAGE->requires->js_call_amd('tool_admin_presets/adminpresets_tree', 'init', ['action' => 'export']);
+
         $url = new \moodle_url('/admin/tool/admin_presets/index.php', ['action' => 'export', 'mode' => 'execute']);
         $this->moodleform = new export_form($url);
     }

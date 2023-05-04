@@ -42,74 +42,74 @@ class manager {
     /** @var array Setting classes mapping, to associated the local/setting class that should be used when there is
      * no specific class. */
     protected static $settingclassesmap = [
-            'adminpresets_admin_setting_agedigitalconsentmap' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configcolourpicker' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configdirectory' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configduration_with_advanced' => 'adminpresets_admin_setting_configtext_with_advanced',
-            'adminpresets_admin_setting_configduration' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configempty' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configexecutable' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configfile' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_confightmleditor' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configmixedhostiplist' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configmultiselect_modules' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_configpasswordunmask' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configportlist' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configselect_with_lock' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_configtext_trim_lower' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configtext_with_maxlength' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configtextarea' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_configthemepreset' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_countrycodes' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_courselist_frontpage' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_description' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_enablemobileservice' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_filetypes' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_forcetimezone' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_grade_profilereport' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_langlist' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_my_grades_report' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_pickroles' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_question_behaviour' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_regradingcheckbox' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_scsscode' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_servertimezone' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_sitesetcheckbox' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_sitesetselect' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_special_adminseesall' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_special_backup_auto_destination' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_special_coursecontact' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_special_coursemanager' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_special_debug' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_special_frontpagedesc' => 'adminpresets_admin_setting_sitesettext',
-            'adminpresets_admin_setting_special_gradebookroles' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_special_gradeexport' => 'adminpresets_admin_setting_configmulticheckbox',
-            'adminpresets_admin_setting_special_gradelimiting' => 'adminpresets_admin_setting_configcheckbox',
-            'adminpresets_admin_setting_special_grademinmaxtouse' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_setting_special_gradepointdefault' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_special_gradepointmax' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_admin_setting_special_registerauth' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_setting_special_selectsetup' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_settings_country_select' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_settings_coursecat_select' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_settings_h5plib_handler_select' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_admin_settings_num_course_sections' => 'adminpresets_admin_setting_configmultiselect_with_loader',
-            'adminpresets_admin_settings_sitepolicy_handler_select' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_antivirus_clamav_pathtounixsocket_setting' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_antivirus_clamav_runningmethod_setting' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_antivirus_clamav_tcpsockethost_setting' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_db_admin_setting_special_auth_configtext' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_ldap_admin_setting_special_lowercase_configtext' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_ldap_admin_setting_special_ntlm_configtext' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_shibboleth_admin_setting_convert_data' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_shibboleth_admin_setting_special_idp_configtextarea' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_auth_shibboleth_admin_setting_special_wayf_select' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_editor_atto_toolbar_setting' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_enrol_database_admin_setting_category' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_enrol_flatfile_role_setting' => 'adminpresets_admin_setting_configtext',
-            'adminpresets_enrol_ldap_admin_setting_category' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_format_singleactivity_admin_setting_activitytype' => 'adminpresets_admin_setting_configselect',
-            'adminpresets_qtype_multichoice_admin_setting_answernumbering' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_agedigitalconsentmap' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configcolourpicker' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configdirectory' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configduration_with_advanced' => 'adminpresets_admin_setting_configtext_with_advanced',
+        'adminpresets_admin_setting_configduration' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configempty' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configexecutable' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configfile' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_confightmleditor' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configmixedhostiplist' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configmultiselect_modules' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_configpasswordunmask' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configportlist' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configselect_with_lock' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_configtext_trim_lower' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configtext_with_maxlength' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configtextarea' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_configthemepreset' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_countrycodes' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_courselist_frontpage' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_description' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_enablemobileservice' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_filetypes' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_forcetimezone' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_grade_profilereport' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_langlist' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_my_grades_report' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_pickroles' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_question_behaviour' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_regradingcheckbox' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_scsscode' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_servertimezone' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_sitesetcheckbox' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_sitesetselect' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_special_adminseesall' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_special_backup_auto_destination' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_special_coursecontact' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_special_coursemanager' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_special_debug' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_special_frontpagedesc' => 'adminpresets_admin_setting_sitesettext',
+        'adminpresets_admin_setting_special_gradebookroles' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_special_gradeexport' => 'adminpresets_admin_setting_configmulticheckbox',
+        'adminpresets_admin_setting_special_gradelimiting' => 'adminpresets_admin_setting_configcheckbox',
+        'adminpresets_admin_setting_special_grademinmaxtouse' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_setting_special_gradepointdefault' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_special_gradepointmax' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_admin_setting_special_registerauth' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_setting_special_selectsetup' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_settings_country_select' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_settings_coursecat_select' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_settings_h5plib_handler_select' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_admin_settings_num_course_sections' => 'adminpresets_admin_setting_configmultiselect_with_loader',
+        'adminpresets_admin_settings_sitepolicy_handler_select' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_antivirus_clamav_pathtounixsocket_setting' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_antivirus_clamav_runningmethod_setting' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_antivirus_clamav_tcpsockethost_setting' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_db_admin_setting_special_auth_configtext' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_ldap_admin_setting_special_lowercase_configtext' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_ldap_admin_setting_special_ntlm_configtext' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_shibboleth_admin_setting_convert_data' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_shibboleth_admin_setting_special_idp_configtextarea' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_auth_shibboleth_admin_setting_special_wayf_select' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_editor_atto_toolbar_setting' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_enrol_database_admin_setting_category' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_enrol_flatfile_role_setting' => 'adminpresets_admin_setting_configtext',
+        'adminpresets_enrol_ldap_admin_setting_category' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_format_singleactivity_admin_setting_activitytype' => 'adminpresets_admin_setting_configselect',
+        'adminpresets_qtype_multichoice_admin_setting_answernumbering' => 'adminpresets_admin_setting_configselect',
     ];
 
     /** @var array Relation between database fields and XML files. **/
@@ -149,7 +149,7 @@ class manager {
 
         // Adding site settings in course table.
         $frontpagevalues = $DB->get_record_select('course', 'id = 1',
-                [], 'fullname, shortname, summary');
+            [], 'fullname, shortname, summary');
         foreach ($frontpagevalues as $field => $value) {
             $dbconfig[$field] = new stdClass();
             $dbconfig[$field]->name = $field;
@@ -257,7 +257,7 @@ class manager {
                             if (!$sitedbvalues) {
                                 $itemid = $dbsettings[$values->plugin][$settingname]->itemid;
                                 $attrs = $DB->get_records('adminpresets_it_a',
-                                        ['itemid' => $itemid], '', 'name, value');
+                                    ['itemid' => $itemid], '', 'name, value');
                             }
                             foreach ($attributes as $defaultvarname => $varname) {
 
@@ -287,6 +287,9 @@ class manager {
                                 }
                             }
                         }
+
+                        // Set setting text.
+                        $setting->set_text();
 
                         // Adding to general settings array.
                         $settings[$values->plugin][$settingname] = $setting;
@@ -386,7 +389,6 @@ class manager {
         return $settings;
     }
 
-
     /**
      * Apply a given preset.
      *
@@ -455,6 +457,11 @@ class manager {
                     continue;
                 }
 
+                // Skip settings if not checked.
+                if (!optional_param("$settingname@@$plugin", 0, PARAM_BOOL)) {
+                    continue;
+                }
+
                 $setting = new stdClass();
                 $setting->adminpresetid = $presetid;
                 $setting->plugin = $plugin;
@@ -493,6 +500,11 @@ class manager {
                     $entry->plugin = $plugintype;
                     $entry->name = $pluginname;
                     $entry->enabled = $pluginclass::get_enabled_plugin($pluginname);
+
+                    // Skip settings if not checked.
+                    if (!optional_param("$pluginname@@$plugintype", 0, PARAM_BOOL)) {
+                        continue;
+                    }
 
                     $DB->insert_record('adminpresets_plug', $entry);
                     $pluginsfound = true;
@@ -636,7 +648,7 @@ class manager {
         // Prepare the preset info.
         $preset = new stdClass();
         foreach (static::$dbxmlrelations as $dbname => $xmlname) {
-            $preset->$dbname = (String) $xml->$xmlname;
+            $preset->$dbname = (string) $xml->$xmlname;
         }
         $preset->userid = $USER->id;
         $preset->timeimported = time();
@@ -705,7 +717,7 @@ class manager {
                             // Check the attribute existence.
                             if (!isset($itemattributenames[$attrname])) {
                                 debugging('The ' . $plugin . '/' . $name . ' attribute ' . $attrname .
-                                        ' is not supported by this Moodle version', DEBUG_DEVELOPER);
+                                    ' is not supported by this Moodle version', DEBUG_DEVELOPER);
                                 continue;
                             }
 
@@ -967,8 +979,8 @@ class manager {
 
         // Delete application if no items nor attributes nor plugins of the application remains.
         if (!$DB->get_records('adminpresets_app_it', ['adminpresetapplyid' => $presetappid]) &&
-                !$DB->get_records('adminpresets_app_it_a', ['adminpresetapplyid' => $presetappid]) &&
-                !$DB->get_records('adminpresets_app_plug', ['adminpresetapplyid' => $presetappid])) {
+            !$DB->get_records('adminpresets_app_it_a', ['adminpresetapplyid' => $presetappid]) &&
+            !$DB->get_records('adminpresets_app_plug', ['adminpresetapplyid' => $presetappid])) {
 
             $presetapp = $DB->get_record('adminpresets_app', ['id' => $presetappid]);
             $DB->delete_records('adminpresets_app', ['id' => $presetappid]);
@@ -1012,7 +1024,7 @@ class manager {
                 // Wrong setting, set_value() method has previously cleaned the value.
                 if ($sitesetting->get_value() === false) {
                     debugging($presetsetting->get_settingdata()->plugin . '/' . $presetsetting->get_settingdata()->name .
-                            ' setting has a wrong value!', DEBUG_DEVELOPER);
+                        ' setting has a wrong value!', DEBUG_DEVELOPER);
                     continue;
                 }
 
@@ -1186,4 +1198,203 @@ class manager {
         return [$applied, $skipped, $adminpresetapplyid];
     }
 
+    /**
+     * Gets the javascript to populate the settings tree
+     *
+     * @param array $settings Array format $array['plugin']['settingname'] = settings_types child class
+     * @return array Array of settings data ids, nodes, labels, descriptions and parents.
+     */
+    public function get_settings_branches(array $settings): array {
+
+        // Nodes should be added in hierarchical order.
+        $nodes = ['categories' => [], 'pages' => [], 'settings' => []];
+        $nodes = $this->get_settings_elements($settings, false, false, $nodes);
+
+        $levels = ['categories', 'pages', 'settings'];
+        foreach ($levels as $level) {
+            foreach ($nodes[$level] as $data) {
+                $ids[$data['nodename']] = $data['type'];
+                $nodeids[$data['nodename']] = $data['nodename'];
+                $labels[$data['nodename']] = $data['nodetext'];
+                $descriptions[$data['nodename']] = $data['description'];
+                $parents[$data['nodename']] = $data['parents'];
+            }
+        }
+
+        return [
+            'ids' => $ids,
+            'nodes' => $nodeids,
+            'labels' => $labels,
+            'descriptions' => $descriptions,
+            'parents' => $parents
+        ];
+    }
+
+    /**
+     * Gets the html code to select the settings to export/import/load
+     *
+     * @param array $allsettings Array format $array['plugin']['settingname'] = settings_types child class
+     * @param object|bool $admintree The admin tree branche object or false if we are in the root
+     * @param object|bool $jsparentnode Name of the javascript parent category node
+     * @param array $nodes Tree nodes
+     * @return array Code to output
+     */
+    public function get_settings_elements(array $allsettings, $admintree = false, $jsparentnode = false,
+        array &$nodes = []): array {
+
+        if (empty($this->adminroot)) {
+            $this->adminroot = admin_get_root(false, true);
+        }
+
+        // If there are no children, load admin tree and iterate through.
+        if (!$admintree) {
+            $this->adminroot = admin_get_root(false, true);
+            $admintree = $this->adminroot->children;
+        }
+
+        // If there are no parentnode specified the parent becomes the tree root.
+        if (!$jsparentnode) {
+            $jsparentnode = 'root';
+        }
+
+        // Iterates through children.
+        foreach ($admintree as $child) {
+            $pagesettings = [];
+
+            // We must search category children.
+            if (is_a($child, 'admin_category')) {
+                if ($child->children) {
+                    $categorynode = $child->name . 'Node';
+                    $nodehtml = $child->visiblename;
+                    $nodes['categories'][$categorynode] = [
+                        'type' => 'category',
+                        'nodename' => $categorynode,
+                        'nodetext' => (string) $nodehtml,
+                        'description' => '',
+                        'parents' => $jsparentnode
+                    ];
+                    // Not all admin_categories have admin_settingpages.
+                    $this->get_settings_elements($allsettings, $child->children, $categorynode, $nodes);
+                }
+
+                // Settings page.
+            } else if (is_a($child, 'admin_settingpage') || is_a($child, 'admin_externalpage')) {
+                // Only if there are settings.
+                if (property_exists($child, 'settings')) {
+
+                    // The name of that page tree node.
+                    $pagenode = $child->name . 'Node';
+
+                    foreach ($child->settings as $values) {
+                        $settingname = $values->name;
+
+                        // IF no plugin was specified mark as 'none'.
+                        if (!$plugin = $values->plugin) {
+                            $plugin = 'none';
+                        }
+
+                        if (empty($allsettings[$plugin][$settingname])) {
+                            continue;
+                        }
+
+                        // Getting setting data.
+                        $setting = $allsettings[$plugin][$settingname];
+                        $settingid = $setting->get_id();
+
+                        // String to add the setting to js tree.
+                        $pagesettings[$settingid] = [
+                            'type' => 'setting',
+                            'nodename' => $settingid,
+                            'nodetext' => $setting->get_text(),
+                            'description' => $setting->get_description(),
+                            'parents' => $pagenode
+                        ];
+                    }
+
+                    // The page node only should be added if it have children.
+                    if ($pagesettings) {
+                        $nodehtml = $child->visiblename;
+                        $nodes['pages'][$pagenode] = [
+                            'type' => 'page',
+                            'nodename' => $pagenode,
+                            'nodetext' => (string) $nodehtml,
+                            'description' => '',
+                            'parents' => $jsparentnode
+                        ];
+                        $nodes['settings'] = array_merge($nodes['settings'], $pagesettings);
+                    }
+                }
+            }
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * Get plugins data.
+     *
+     * @return stdClass $settings Array format $array['plugin']['pluginname'] = settings_types child class
+     **/
+    public function get_site_plugins(): stdClass {
+
+        $dataplugin = new stdClass();
+        $pluginmanager = \core_plugin_manager::instance();
+        $types = $pluginmanager->get_plugin_types();
+        foreach ($types as $plugintype => $notused) {
+
+            $plugins = $pluginmanager->get_present_plugins($plugintype);
+            $pluginclass = \core_plugin_manager::resolve_plugininfo_class($plugintype);
+
+            if (!empty($plugins)) {
+
+                foreach ($plugins as $pluginname => $plugin) {
+
+                    $entry = [];
+                    $entry['type'] = $plugintype;
+                    $entry['name'] = $pluginname;
+                    $entry['enabled'] = $pluginclass::get_enabled_plugin($pluginname);
+                    $dataplugin->{$entry['type']} = new stdClass();
+                    $dataplugin->{$entry['type']}->list = new stdClass();
+                    $dataplugin->{$entry['type']}->list->{$entry['name']} = $entry;
+                    $dataplugin->{$entry['type']}->plugintype = $plugintype;
+                }
+            }
+        }
+
+        return $dataplugin;
+    }
+
+    /**
+     * Gets the javascript to populate the plugins tree
+     *
+     * @param stdClass $plugins Array format $array['plugin']['settingname'] = plugins child class
+     * @return array Array of settings data ids, nodes, labels, descriptions and parents.
+     */
+    public function get_plugins_branches(stdClass $plugins): array {
+
+        foreach ($plugins as $key => $plugin) {
+
+            $ids[$key] = 'category';
+            $nodeids[$key] = $key . 'Node';
+            $labels[$key] = $plugin->plugintype;
+            $descriptions[$key] = '';
+            $parents[$key] = 'root';
+
+            foreach ($plugin->list as $data) {
+                $ids[] = 'setting';
+                $nodeids[] = $data['name'] . "@@" . $plugin->plugintype;
+                $labels[] = $data['name'];
+                $descriptions[] = '';
+                $parents[] = $key . 'Node';
+            }
+        }
+
+        return [
+            'ids' => $ids,
+            'nodes' => $nodeids,
+            'labels' => $labels,
+            'descriptions' => $descriptions,
+            'parents' => $parents,
+        ];
+    }
 }

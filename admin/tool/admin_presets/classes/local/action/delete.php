@@ -41,9 +41,9 @@ class delete extends base {
             $deletetext = get_string('deletepreset', 'tool_admin_presets', $presetdata->name);
 
             $params = ['action' => $this->action, 'mode' => 'execute', 'id' => $this->id, 'sesskey' => sesskey()];
-            $confirmurl = new \moodle_url('/admin/tool/admin_presets/index.php', $params);
-
-            $cancelurl = new \moodle_url('/admin/tool/admin_presets/index.php');
+            $url = '/admin/tool/admin_presets/index.php';
+            $confirmurl = new \moodle_url($url, $params);
+            $cancelurl = new \moodle_url($url);
 
             // If the preset was applied add a warning text.
             if ($DB->get_records('adminpresets_app', ['adminpresetid' => $this->id])) {

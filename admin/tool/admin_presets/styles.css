@@ -1,15 +1,71 @@
-.admin_presets_error {
+:root {
+    --gray: #6c757d;
+}
+
+.path-admin-tool-admin_presets .admin_presets_error {
     color: red;
     text-align: center;
 }
 
-.admin_presets_success {
+.path-admin-tool-admin_presets .admin_presets_success {
     color: green;
     text-align: center;
 }
 
-.adminpreset_appdescription {
+.path-admin-tool-admin_presets .adminpreset_appdescription {
     font-size: small;
-    margin-top: 40px;
     margin-bottom: 20px;
+    margin-top: 40px;
+}
+
+.path-admin-tool-admin_presets div.preset_tree div[role='treeitem'] a.collapse_link,
+.path-admin-tool-admin_presets div.preset_tree div[role='treeitem'] .setting_element {
+    border-color: #e9ecef;
+    border-style: solid;
+    border-width: 1px 0;
+    box-sizing: border-box;
+    color: var(--gray);
+    display: flex;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    padding: 15px 15px 15px 45px;
+    text-decoration: none;
+    text-transform: capitalize;
+}
+
+.admin_presets_tree_value {
+    border: 0;
+}
+
+.tree_header.container-fluid {
+    padding: 10px 15px 10px 45px;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.path-admin-tool-admin_presets div.preset_tree div[role='treeitem'] a.collapse_link.collapsed .expanded-icon {
+    display: none;
+}
+
+.path-admin-tool-admin_presets div.preset_tree div[role='treeitem'] a.collapse_link:not(.collapsed) .collapsed-icon {
+    display: none;
+}
+
+.path-admin-tool-admin_presets div.preset_tree div[role='treeitem'] a.collapse_link label.active {
+    /* Content/Primary */
+    color: var(--primary);
+}
+
+.path-admin-tool-admin_presets div.preset_tree div[role='treeitem'] a.collapse_link label {
+    margin-bottom: 0;
+}
+
+#id_settings_tree,
+#id_plugins_tree {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 0;
 }

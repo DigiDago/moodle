@@ -15,16 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Admin tool presets plugin to load some settings.
+ * Admin presets external functions and service definitions.
  *
  * @package          tool_admin_presets
  * @copyright        2021 Pimenko <support@pimenko.com><pimenko.com>
- * @author           Jordan Kesraoui | Sylvain Revenu | Pimenko based on David Monllaó <david.monllao@urv.cat> code
+ * @author           Jordan Kesraoui
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'tool_admin_presets';
-$plugin->version = 2023050200; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires = 2023041800;
+$functions = [
+    'tool_admin_presets_get_settings' => [
+        'classname' => 'tool_admin_presets\external\get_settings',
+        'description' => 'Get all system settings',
+        'type' => 'read',
+        'ajax' => true
+    ]
+];

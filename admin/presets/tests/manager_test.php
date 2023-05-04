@@ -281,7 +281,20 @@ class manager_test extends \advanced_testcase {
             'comments' => ['text' => 'This is a presets for testing export'],
             'author' => 'Super-Girl',
             'includesensiblesettings' => $includesensible,
+            'recaptchapublickey@@none' => '1',
+            'enablebadges@@none' => '1',
+            'cronremotepassword@@none' => '1',
+            'mediawidth@@mod_lesson' => '1',
+            'maxanswers@@mod_lesson' => '1',
+            'maxanswers_adv@@mod_lesson' => '1',
+            'defaultfeedback@@mod_lesson' => '1',
+            'defaultfeedback_adv@@mod_lesson' => '1',
+            'cohort@@enrol' => '1',
+            'guest@@enrol' => '1',
+            'auutoenrol@@enrol' => '1',
+            'database@@enrol' => '1'
         ];
+        \tool_admin_presets\form\export_form::mock_submit($data);
 
         // Call the method to be tested.
         $manager = new manager();
@@ -335,8 +348,10 @@ class manager_test extends \advanced_testcase {
         foreach ($plugins as $pluginname => $unused) {
             $params = ['adminpresetid' => $presetid, 'plugin' => $plugintype, 'name' => $pluginname];
             $plugin = $DB->get_record('adminpresets_plug', $params);
-            $enabled = (!empty($enabledplugins) && array_key_exists($pluginname, $enabledplugins));
-            $this->assertEquals($enabled, (bool) $plugin->enabled);
+            if ($plugin) {
+                $enabled = (!empty($enabledplugins) && array_key_exists($pluginname, $enabledplugins));
+                $this->assertEquals($enabled, (bool) $plugin->enabled);
+            }
         }
 
         // Check whether sensible settings have been exported or not.
@@ -759,7 +774,7 @@ class manager_test extends \advanced_testcase {
         $this->assertEquals(1, get_config('core', 'enablecompletion'));
         $this->assertEquals(0, get_config('core', 'usecomments'));
 
-        // Check the plugins visibility have been reverted accordingly.
+        // Check the plugin visibility have been reverted accordingly.
         $enabledplugins = \core\plugininfo\enrol::get_enabled_plugins();
         $this->assertArrayHasKey('guest', $enabledplugins);
         $enabledplugins = \core\plugininfo\mod::get_enabled_plugins();

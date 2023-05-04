@@ -16,6 +16,9 @@
 
 namespace core_adminpresets\local\setting;
 
+use admin_setting_configtext;
+use stdClass;
+
 /**
  * Tests for the adminpresets_setting class.
  *
@@ -194,5 +197,87 @@ class adminpresets_setting_test extends \advanced_testcase {
                 'expectedsaved' => false,
             ],
         ];
+    }
+
+    /**
+     * Test that id generates by get_id are formated the good way plugin'@@'optionname
+     *
+     * @covers ::get_id
+     *
+     */
+    public function test_get_id(): void {
+
+        $this->resetAfterTest();
+
+        // Login as admin, to access all the settings.
+        $this->setAdminUser();
+
+        $testsetting = new admin_setting_configtext('testforphpunit/settingforphpunit',
+            'Lorem', 'ipsum', 100, PARAM_INT);
+
+        $adminpresetsetting = new adminpresets_admin_setting_configtext($testsetting, 100);
+
+        $settingid = $adminpresetsetting->get_id();
+
+        $this->assertEquals('settingforphpunit@@testforphpunit', $settingid);
+    }
+
+    /**
+     * Test that the returned text of get_text is the formated description with a checkbox.
+     *
+     * @covers ::get_text
+     *
+     */
+    public function test_get_text(): void {
+
+        $this->resetAfterTest();
+
+        // Login as admin, to access all the settings.
+        $this->setAdminUser();
+
+        $text = '';
+
+        $testsetting = new admin_setting_configtext('testforphpunit/settingforphpunit',
+            'Lorem', 'ipsum', 'The answer to life', PARAM_TEXT);
+
+        $adminpresetsetting = new adminpresets_admin_setting_configtext($testsetting, 'The answer to life');
+
+        $adminpresetsetting->set_text();
+
+        $text .= '<div class="admin_presets_tree_name col-sm-8">' .
+            '<label class="p-2" for="settingforphpunit@@testforphpunit_checkbox">Lorem</label></div>';
+        $text .= '<div class="admin_presets_tree_value col-sm-4 text-truncate">The answer to life</div>';
+        $encodedtext = rawurlencode($text);
+
+        $settingtext = $adminpresetsetting->get_text();
+
+        $this->assertEquals($encodedtext, $settingtext);
+    }
+
+    /**
+     * Test that the returned text of get_description is the clean string description of the setting.
+     *
+     * @covers ::get_description
+     *
+     */
+    public function test_get_description(): void {
+        $this->resetAfterTest();
+
+        // Login as admin, to access all the settings.
+        $this->setAdminUser();
+
+        $description = '';
+
+        $testsetting = new admin_setting_configtext('testforphpunit/settingforphpunit',
+            'Lorem', 'The @nswer to life', 'The answer to life', PARAM_TEXT);
+
+        $adminpresetsetting = new adminpresets_admin_setting_configtext($testsetting, 'The answer to life');
+
+        $settingdescription = $adminpresetsetting->get_description();
+
+        $description = 'The @nswer to life';
+        $encodeddescription = rawurlencode($description);
+
+        $this->assertEquals($encodeddescription, $settingdescription);
     }
 }

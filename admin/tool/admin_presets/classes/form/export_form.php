@@ -34,7 +34,7 @@ require_once($CFG->dirroot . '/lib/formslib.php');
 class export_form extends moodleform {
 
     public function definition(): void {
-        global $USER;
+        global $USER, $OUTPUT;
 
         $mform = &$this->_form;
 
@@ -55,6 +55,31 @@ class export_form extends moodleform {
             get_string('includesensiblesettings', 'tool_admin_presets'));
         $mform->setDefault('includesensiblesettings', 0);
         $mform->addHelpButton('includesensiblesettings', 'includesensiblesettings', 'tool_admin_presets');
+
+        // Moodle settings table.
+        $mform->addElement('header', 'settings_tree',
+            get_string('adminsettings', 'tool_admin_presets'));
+
+        $icon = $OUTPUT->pix_icon('i/loading_small', get_string('loading', 'tool_admin_presets'));
+        $templatecontext = [
+            'icon' => $icon,
+            'treeId' => 'settings_tree_div'
+        ];
+        $html = $OUTPUT->render_from_template('tool_admin_presets/form-treesettings', $templatecontext);
+
+        $mform->addElement('html', $html);
+
+        // Moodle settings table.
+        $mform->addElement('header', 'plugins_tree',
+            get_string('adminsettingsplugin', 'tool_admin_presets'));
+
+        $templatecontext = [
+            'icon' => $icon,
+            'treeId' => 'settingsplugin_tree_div'
+        ];
+        $html = $OUTPUT->render_from_template('tool_admin_presets/form-treesettings', $templatecontext);
+
+        $mform->addElement('html', $html);
 
         $this->add_action_buttons(true, get_string('actionexportbutton', 'tool_admin_presets'));
     }
